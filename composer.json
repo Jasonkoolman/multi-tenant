@@ -1,0 +1,20 @@
+{
+    "name": "kwalit/multi-tenant",
+    "description": "A simple and lightweight package to craft multi-tenant applications with Laravel.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jason Koolman",
+            "email": "jason.koolman@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kwalit\\MultiTenant\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
