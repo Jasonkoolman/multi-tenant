@@ -34,10 +34,10 @@ class TenantModel extends Model
     {
         $tenant = tenant();
 
-        if($tenant) {
-            return array_get($tenant, 'id');
+        if(is_null($tenant)) {
+            return parent::getConnectionName();
         }
 
-        return parent::getConnectionName();
+        return array_get($tenant, 'id');
     }
 }
