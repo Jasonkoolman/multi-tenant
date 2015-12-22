@@ -3,7 +3,6 @@
 namespace Kwalit\MultiTenant\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Kwalit\MultiTenant\Exceptions\TenantDatabaseNotFoundException;
 
 class TenantModel extends Model
 {
@@ -33,12 +32,10 @@ class TenantModel extends Model
      */
     public function getConnectionName()
     {
-        $tenant = app()->make('Tenant');
+        $tenant = tenant();
 
         if($tenant) {
-            return is_null(config('database.connections.' . $tenant['id'])) ?
-                new TenantDatabaseNotFoundException() :
-                array_get($tenant, 'id');
+            return array_get($tenant, 'id');
         }
 
         return parent::getConnectionName();
