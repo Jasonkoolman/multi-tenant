@@ -16,11 +16,8 @@ class MultiTenantServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ( ! $this->app->routesAreCached() && file_exists(__DIR__ . '/routes.php')) {
-            // Load the tenant routes within the application controller namespace.
-            Route::group(['namespace' => 'App\Http\Controllers'], function ($router) {
-                require_once __DIR__ . '/routes.php';
-            });
+        if ( ! $this->app->routesAreCached()) {
+            require_once __DIR__ . '/routes.php';
         }
 
         require_once __DIR__ . '/Helpers/helpers.php';
@@ -33,9 +30,11 @@ class MultiTenantServiceProvider extends ServiceProvider
             // Load views from the current tenant directory
             $this->app['view']->addLocation(realpath($directory . '/views'));
 
-            // Load optional routes from the current tenant directory
+            // Load the tenant routes within the application controller namespace.
             if(file_exists($directory . '/routes.php')) {
-                require_once $directory . '/routes.php';
+                Route::group(['namespace' => 'App\Http\Controllers'], function () use ($directory) {
+                    require_once $directory . '/routes.php';
+                });
             }
         }
 

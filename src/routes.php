@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dynamically load tenant assets with this route.
+ * Load tenant assets outside the public folder with this route.
  */
 Route::get('asset/{path}', ['as' => 'asset', function($path)
 {
