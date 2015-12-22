@@ -2,7 +2,7 @@
 
 namespace Kwalit\MultiTenant;
 
-use App\User;
+use Route;
 use Request;
 use Exception;
 use Illuminate\Support\ServiceProvider;
@@ -16,9 +16,13 @@ class MultiTenantServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ( ! $this->app->routesAreCached()) {
-            require_once __DIR__ . '/routes.php';
+        if ( ! $this->app->routesAreCached() && file_exists(__DIR__ . '/routes.php')) {
+            // Load the tenant routes within the application controller namespace.
+            Route::group(['namespace' => 'App\Http\Controllers'], function ($router) {
+                require_once __DIR__ . '/routes.php';
+            });
         }
+
         require_once __DIR__ . '/Helpers/helpers.php';
 
         $this->registerTenant();
@@ -27,9 +31,7 @@ class MultiTenantServiceProvider extends ServiceProvider
             $directory = tenant_path($tenant);
 
             // Load views from the current tenant directory
-            $this->app['view']->addLocation(
-                realpath($directory . '/views')
-            );
+            $this->app['view']->addLocation(realpath($directory . '/views'));
 
             // Load optional routes from the current tenant directory
             if(file_exists($directory . '/routes.php')) {
@@ -38,14 +40,12 @@ class MultiTenantServiceProvider extends ServiceProvider
         }
 
         // Load base views, these will be overridden by tenant views with the same name
-        $this->app['view']->addLocation(
-            realpath(base_path('resources/views'))
-        );
+        $this->app['view']->addLocation(realpath(base_path('resources/views')));
 
-        // Publish the tenant config, which will be overriden by local configuation
+        // Publish the tenant config, which will be overriden by local configuration
         $this->publishes([
-            __DIR__ . '/../config/tenant.php' => config_path('tenant.php'),
-        ]);
+            __DIR__ . '/../config/tenant.php' => config_path('tenant.php')
+        ], 'multi-tenant');
     }
 
     /**
@@ -74,7 +74,7 @@ class MultiTenantServiceProvider extends ServiceProvider
                 return $tenants[$host];
             }
 
-            return null;
+            return false;
         });
     }
 }

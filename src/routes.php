@@ -5,10 +5,9 @@
  */
 Route::get('asset/{path}', ['as' => 'asset', function($path)
 {
-    $tenant = tenant();
-    $asset  = tenant_path($tenant, '/assets/' . $path);
+    $asset = tenant_path(tenant(), '/assets/' . $path);
 
-    if( ! file_exists($asset)) {
+    if( ! file_exists($asset) ) {
         abort(404);
     }
 

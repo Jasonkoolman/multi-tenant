@@ -25,7 +25,7 @@ if ( ! function_exists('tenant_path')) {
      *
      * @param  int|array $tenant
      * @param  string $affix
-     * @return string|false
+     * @return string
      */
     function tenant_path($tenant, $affix = '')
     {
@@ -48,9 +48,7 @@ if ( ! function_exists('tasset')) {
      */
     function tasset($path)
     {
-        $tenant = tenant();
-
-        if($tenant) {
+        if( tenant() ) {
             return route('asset', [$path]);
         }
 
