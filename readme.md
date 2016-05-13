@@ -17,9 +17,12 @@ Tenants are defined in `config/tenant.php`. Make sure to run the `php artisan ve
                 'id'    => 'anothersite',
                 'name'  => 'AnotherSite',
                 'https' => false,
+                'foo' => 'bar',
             ]
         ]
     ]
+    
+In some cases you might want to add custom tenant-specific parameters, like an API key, for instance. Simply use the helper function to retrieve a tenant-specific key value: `tenant('foo')`.
 
 #### Eloquent models
 In order for your models to deal with multiple connections, simply extend the `TenantModel` class or implement the `HasTenancy` trait. Both classes do exactly the same. Choose the approach you prefer.
