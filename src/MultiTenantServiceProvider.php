@@ -2,9 +2,9 @@
 
 namespace Kwalit\MultiTenant;
 
+use Cache;
 use Route;
 use Request;
-use Exception;
 use Illuminate\Support\ServiceProvider;
 
 class MultiTenantServiceProvider extends ServiceProvider
@@ -19,7 +19,6 @@ class MultiTenantServiceProvider extends ServiceProvider
         if ( ! $this->app->routesAreCached()) {
             require_once __DIR__ . '/routes.php';
         }
-
         require_once __DIR__ . '/Helpers/helpers.php';
 
         $this->registerTenant();
@@ -36,6 +35,9 @@ class MultiTenantServiceProvider extends ServiceProvider
                     require_once $directory . '/routes.php';
                 });
             }
+
+            // Set the tenant cache driver
+            Cache::setDefaultDriver('friet-nl');
         }
 
         // Load base views, these will be overridden by tenant views with the same name
@@ -69,7 +71,7 @@ class MultiTenantServiceProvider extends ServiceProvider
             $tenants = config('tenant.hosts');
             $host = Request::server('HTTP_HOST');
 
-            if(array_key_exists($host, $tenants)) {
+            if (array_key_exists($host, $tenants)) {
                 return $tenants[$host];
             }
 

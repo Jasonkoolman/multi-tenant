@@ -1,18 +1,9 @@
 <?php
 
-namespace Kwalit\MultiTenant\Models;
+namespace Kwalit\MultiTenant\Traits;
 
-use Illuminate\Database\Eloquent\Model;
-
-class TenantModel extends Model
+trait HasTenancy
 {
-    /**
-     * The connection name for the model.
-     *
-     * @var string
-     */
-    protected $connection;
-
     /**
      * Get the current connection name for the model.
      *
@@ -26,6 +17,6 @@ class TenantModel extends Model
             return parent::getConnectionName();
         }
 
-        return array_get($tenant, 'id');
+        return $tenant['id'];
     }
 }

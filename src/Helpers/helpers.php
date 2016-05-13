@@ -3,10 +3,12 @@
 if ( ! function_exists('tenant')) {
     /**
      * Get the current tenant.
+     * Retrieves the given key value if the parameter is present.
      *
-     * @return array|null
+     * @param  int $key
+     * @return mixed
      */
-    function tenant()
+    function tenant($key = null)
     {
         static $tenant;
 
@@ -14,7 +16,7 @@ if ( ! function_exists('tenant')) {
             $tenant = app('Tenant');
         }
 
-        return $tenant;
+        return $key ? $tenant[$key] : $tenant;
     }
 
 }
@@ -43,15 +45,22 @@ if ( ! function_exists('tasset')) {
     /**
      * Get the route to retrieve the given tenant asset.
      *
+     * Uses a fallback to load the asset from the default
+     * directory in case the tenant asset doesn't exist.
+     *
      * @param  string $path
+     * @param  bool $secure
      * @return string
      */
-    function tasset($path)
+    function tasset($path, $secure = null)
     {
-        if( tenant() ) {
+        $tenant = tenant();
+        $asset = tenant_path($tenant, '/assets/' . $path);
+
+        if (tenant() && file_exists($asset)) {
             return route('asset', [$path]);
         }
 
-        return asset($path);
+        return asset($path, $secure);
     }
 }
