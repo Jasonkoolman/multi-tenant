@@ -31,3 +31,6 @@ In order for your models to deal with multiple connections, simply extend the `T
 Each tenant has it's own database, which you will want to migrate and seed every once in a while. Define your tenant connections within `config/database.php` and simply add the `--database` parameter to tell artisan which database to choose, for example:
 
     php artisan migrate:refresh  --database {tenantConnection} --seed
+    
+### Managing assets
+Each tenant has it's own assets which are, by default, stored at `storage/tenants/{tenantID}/assets`. Use the helper function `tasset('foo.svg')` to retrieve a tenant asset. This function will use the route `asset/{path}` to retrieve assets outside the public directory.

@@ -57,7 +57,7 @@ if ( ! function_exists('tasset')) {
         $tenant = tenant();
         $asset = tenant_path($tenant, '/assets/' . $path);
 
-        if (tenant() && file_exists($asset)) {
+        if ($tenant && file_exists($asset)) {
             return route('asset', [$path]);
         }
 
